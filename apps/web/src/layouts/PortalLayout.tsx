@@ -17,6 +17,7 @@ import {
   Megaphone,
   PackageOpen,
   PanelLeftClose,
+  PanelLeftOpen,
   Printer,
   QrCode,
   Search,
@@ -33,7 +34,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { cn } from '../components/ui'
 import { getAccessToken, getCurrentIdentity } from '../features/auth/auth-storage'
 import { logout } from '../features/auth/auth-api'
-import { AttendanceFab } from '../features/attendance/AttendanceFab'
+// AttendanceFab removed
 import { useMockAuth } from '../features/inventory/MockAuthContext'
 import { ThemeToggle } from '../features/theme/ThemeToggle'
 
@@ -100,28 +101,51 @@ const navigation = (role: Role) => role === 'admin' ? adminNav : role === 'libra
 function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#FFF200] text-[#003399] shadow-sm"><LibraryBig size={22} strokeWidth={2.5} /><span className="absolute bottom-0 h-1 w-full bg-[#003399]" /></div>
-      {!compact ? <div><p className="font-display text-sm font-black leading-tight tracking-tight text-white">STI ORMOC</p><p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70">Smart Library</p></div> : null}
+      <img src="/logo.png" alt="STI College Ormoc Logo" className="w-12 h-auto shrink-0 object-contain rounded-sm" />
+      {!compact ? <div><p className="whitespace-nowrap font-display text-[13px] font-black leading-tight tracking-tight text-zinc-900 dark:text-white">STI COLLEGE ORMOC</p><p className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-400">ONLINE LIBRARY</p></div> : null}
     </div>
   )
 }
 
-function Sidebar({ role, open, onClose }: { role: Role; open: boolean; onClose: () => void }) {
+function Sidebar({ role, open, onClose, collapsed, onToggleCollapse }: { role: Role; open: boolean; onClose: () => void; collapsed: boolean; onToggleCollapse: () => void }) {
   const nav = navigation(role)
   const preview = useMockAuth()
   const claims = preview.identity ?? getCurrentIdentity()
   return (
     <>
-      {open ? <button aria-label="Close navigation" onClick={onClose} className="fixed inset-0 z-40 bg-[#003399]/45 backdrop-blur-sm lg:hidden" /> : null}
-      <aside className={cn('fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-[#003399] text-white transition-transform duration-300 lg:translate-x-0', open ? 'translate-x-0' : '-translate-x-full')}>
-        <div className="flex h-20 items-center justify-between border-b border-white/10 px-5"><Brand /><button onClick={onClose} className="rounded-lg p-2 text-white/60 hover:bg-white/10 hover:text-white lg:hidden"><X size={18} /></button></div>
+      {open ? <button aria-label="Close navigation" onClick={onClose} className="fixed inset-0 z-40 bg-zinc-900/40 backdrop-blur-sm lg:hidden" /> : null}
+      <aside className={cn('fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-r border-zinc-200 dark:border-zinc-800 transition-transform duration-300', open ? 'translate-x-0' : '-translate-x-full', collapsed ? 'lg:-translate-x-full' : 'lg:translate-x-0')}>
+        <div className="flex h-20 items-center justify-between border-b border-zinc-200 dark:border-zinc-800 px-5">
+          <Brand />
+          <div className="flex items-center gap-1">
+            <button onClick={onToggleCollapse} aria-label="Minimize sidebar" className="hidden lg:block rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"><PanelLeftClose size={18} /></button>
+            <button onClick={onClose} className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white lg:hidden"><X size={18} /></button>
+          </div>
+        </div>
         <nav className="flex-1 overflow-y-auto px-3 py-5">
           {nav.map((item) => {
             const Icon = item.icon
-            return <div key={item.to}>{item.section ? <p className="mb-2 mt-4 px-3 text-[9px] font-bold uppercase tracking-[0.2em] text-white/40 first:mt-0">{item.section}</p> : null}<NavLink onClick={onClose} to={item.to} className={({ isActive }) => cn('mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition', isActive ? 'bg-white text-[#003399] shadow-sm dark:bg-[#FFF200]' : 'text-white/70 hover:bg-white/10 hover:text-white')}><Icon size={17} /><span>{item.label}</span></NavLink></div>
+            return (
+              <div key={item.to}>
+                {item.section ? <p className="mb-2 mt-4 px-3 text-xs font-bold uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 first:mt-0">{item.section}</p> : null}
+                <NavLink onClick={onClose} to={item.to} className={({ isActive }) => cn('mb-1 mx-3 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition', isActive ? 'bg-[#0b5ea2] text-white shadow-md dark:bg-[#FFF200] dark:text-[#0b5ea2]' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white')}>
+                  <Icon size={17} /><span>{item.label}</span>
+                </NavLink>
+              </div>
+            )
           })}
         </nav>
-        <div className="border-t border-white/10 p-3"><div className="mt-2 rounded-xl bg-white/5 p-3 ring-1 ring-white/10"><div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFF200] text-xs font-black text-[#003399]">{claims?.role.slice(0, 2).toUpperCase() ?? 'ST'}</span><div className="min-w-0"><p className="truncate text-xs font-bold text-white">{claims?.schoolId ?? 'STI account'}</p><p className="mt-0.5 text-[10px] text-white/50">{claims?.role ?? role}</p></div></div></div></div>
+        <div className="border-t border-zinc-200 dark:border-zinc-800 p-3">
+          <div className="mt-2 rounded-xl bg-zinc-50 dark:bg-zinc-900 p-3 ring-1 ring-zinc-200 dark:ring-zinc-800">
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFF200] text-xs font-black text-[#0b5ea2]">{claims?.role.slice(0, 2).toUpperCase() ?? 'ST'}</span>
+              <div className="min-w-0">
+                <p className="truncate text-xs font-bold text-zinc-900 dark:text-white">{claims?.schoolId ?? 'STI account'}</p>
+                <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{claims?.role ?? role}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </aside>
     </>
   )
@@ -129,6 +153,7 @@ function Sidebar({ role, open, onClose }: { role: Role; open: boolean; onClose: 
 
 export function PortalLayout({ role }: { role: Role }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [desktopCollapsed, setDesktopCollapsed] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
   const nav = navigation(role)
@@ -156,26 +181,58 @@ export function PortalLayout({ role }: { role: Role }) {
     void loadAlerts(); const timer = window.setInterval(() => void loadAlerts(), 15000)
     return () => { active = false; window.clearInterval(timer) }
   }, [role])
-  const signOut = async () => { await logout(); navigate('/login', { replace: true }) }
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  const signOut = async () => { await logout(); navigate('/', { replace: true }) }
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-[#003399] transition-colors dark:bg-[#000d2b] dark:text-[#f2f6ff]">
-      <Sidebar role={role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="lg:pl-64">
-        <header className="sticky top-0 z-30 flex h-20 items-center border-b border-[#003399]/10 bg-white/90 px-4 backdrop-blur-xl transition-colors sm:px-6 lg:px-8 dark:border-white/10 dark:bg-[#001a4d]/92">
-          <button onClick={() => setSidebarOpen(true)} className="mr-3 rounded-xl border border-[#003399]/15 p-2.5 text-[#003399]/65 lg:hidden dark:border-white/15 dark:text-white/70"><Menu size={19} /></button>
-          <div className="hidden sm:block"><p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#003399]/45 dark:text-white/45">{role === 'admin' ? 'Admin workspace' : role === 'librarian' ? 'Librarian workspace' : role === 'staff' ? 'Staff workspace' : role === 'faculty' ? 'Faculty portal' : 'Student portal'}</p><p className="mt-0.5 font-display text-sm font-bold text-[#003399] dark:text-white">{current?.label ?? 'Smart Library'}</p></div>
-          <label className="relative ml-auto hidden w-64 xl:block"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#003399]/45 dark:text-white/45" size={15} /><input placeholder="Search anywhere..." className="h-10 w-full rounded-xl border border-[#003399]/15 bg-[#003399]/5 pl-9 pr-3 text-sm outline-none transition focus:border-[#003399]/15 focus:bg-white focus:ring-4 focus:ring-[#003399]/10 dark:border-white/15 dark:bg-white/5 dark:text-white dark:focus:bg-[#002266]" /></label>
+    <div className="min-h-screen bg-zinc-50 text-zinc-900 transition-colors dark:bg-zinc-950 dark:text-zinc-100 relative">
+      {/* Global Dot-Matrix Background */}
+      <div 
+        className="absolute inset-0 opacity-[0.15] dark:opacity-20 pointer-events-none z-0"
+        style={{
+          backgroundImage: 'radial-gradient(circle, #0b5ea2 1.5px, transparent 1.5px)',
+          backgroundSize: '28px 28px',
+        }}
+      />
+
+      <Sidebar role={role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={desktopCollapsed} onToggleCollapse={() => setDesktopCollapsed(!desktopCollapsed)} />
+      
+      <div className={cn("relative z-10 transition-all duration-300", desktopCollapsed ? "lg:pl-0" : "lg:pl-64")} style={{ "--sidebar-offset": desktopCollapsed ? "0px" : "256px" } as React.CSSProperties}>
+        <header className="sticky top-0 z-30 flex h-20 items-center border-b border-zinc-200 bg-white/80 px-4 backdrop-blur-xl transition-colors sm:px-6 lg:px-8 dark:border-zinc-800 dark:bg-zinc-950/80">
+          <button onClick={() => { setSidebarOpen(true); setDesktopCollapsed(false); }} className={cn("mr-3 rounded-xl border border-zinc-200 p-2.5 text-zinc-500 dark:border-zinc-800 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors", desktopCollapsed ? "block" : "lg:hidden")}><Menu size={19} /></button>
+          <div className="hidden sm:block">
+            <p className="text-xs font-bold uppercase tracking-[0.15em] text-zinc-400 dark:text-zinc-500">{role === 'admin' ? 'Admin workspace' : role === 'librarian' ? 'Librarian workspace' : role === 'staff' ? 'Staff workspace' : role === 'faculty' ? 'Faculty portal' : 'Student portal'}</p>
+            <p className="mt-0.5 font-display text-sm font-bold text-zinc-900 dark:text-white">{current?.label ?? 'Smart Library'}</p>
+          </div>
+          
+          <label className="relative ml-auto hidden w-64 xl:block">
+            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={15} />
+            <input placeholder="Search anywhere..." className="h-10 w-full rounded-xl border border-zinc-200 bg-zinc-50 pl-9 pr-3 text-sm outline-none transition focus:border-[#0b5ea2] focus:bg-white focus:ring-4 focus:ring-[#0b5ea2]/10 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white dark:focus:border-[#FFF200] dark:focus:ring-[#FFF200]/10" />
+          </label>
+          
           <div className="ml-auto flex items-center gap-2 xl:ml-3">
             <ThemeToggle />
-            <button onClick={() => navigate(role === 'admin' ? '/admin/notifications' : role === 'librarian' ? '/librarian/announcements' : role === 'staff' ? '/staff/announcements' : role === 'faculty' ? '/faculty/notifications' : '/student/notifications')} aria-label="Notifications" className="relative rounded-xl border border-[#003399]/15 bg-white p-2.5 text-[#003399]/65 transition hover:bg-[#003399]/5 dark:border-white/15 dark:bg-[#001a4d] dark:text-white/80 dark:hover:bg-white/10"><Bell size={18} />{hasAdminAlerts ? <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#FFF200] ring-2 ring-white dark:ring-[#001a4d]" /> : null}</button>
-            <button onClick={signOut} aria-label="Sign out" title="Sign out" className="rounded-xl border border-[#003399]/15 bg-white p-2.5 text-[#003399]/65 transition hover:bg-[#003399]/5 dark:border-white/15 dark:bg-[#001a4d] dark:text-white/80 dark:hover:bg-white/10"><LogOut size={18} /></button>
-            <button aria-label="Collapse sidebar" className="hidden rounded-xl border border-[#003399]/15 bg-white p-2.5 text-[#003399]/65 lg:block dark:border-white/15 dark:bg-[#001a4d] dark:text-white/80"><PanelLeftClose size={18} /></button>
+            <button onClick={() => navigate(role === 'admin' ? '/admin/notifications' : role === 'librarian' ? '/librarian/announcements' : role === 'staff' ? '/staff/announcements' : role === 'faculty' ? '/faculty/notifications' : '/student/notifications')} aria-label="Notifications" className="relative rounded-xl border border-zinc-200 bg-white p-2.5 text-zinc-500 transition hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-900"><Bell size={18} />{hasAdminAlerts ? <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#FFF200] ring-2 ring-white dark:ring-zinc-950" /> : null}</button>
+            <button onClick={() => setShowLogoutConfirm(true)} aria-label="Sign out" title="Sign out" className="rounded-xl border border-zinc-200 bg-white p-2.5 text-zinc-500 transition hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-900"><LogOut size={18} /></button>
           </div>
         </header>
         <main className="mx-auto max-w-[1500px] p-4 sm:p-6 lg:p-8"><Outlet /></main>
-        {role !== 'admin' ? <AttendanceFab role={role} /> : null}
+        {/* AttendanceFab removed */}
       </div>
+
+      {showLogoutConfirm ? (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/40 p-4 backdrop-blur-sm dark:bg-black/60">
+          <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+            <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white">Sign Out</h3>
+            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Are you sure you want to sign out of your account?</p>
+            <div className="mt-6 flex justify-end gap-3">
+              <button onClick={() => setShowLogoutConfirm(false)} className="h-10 rounded-xl px-4 text-sm font-bold text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">Cancel</button>
+              <button onClick={signOut} className="h-10 rounded-xl bg-[#0b5ea2] px-4 text-sm font-bold text-white hover:bg-[#004488] transition-colors">Sign out</button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }
+

@@ -33,6 +33,7 @@ export const usersApi = {
     return { rows: result.data, pagination: result.meta?.pagination ?? { page: 1, limit: filters.limit, total: 0, total_pages: 0 } }
   },
   detail: async (id: number) => (await request<UserDetail>(`/api/v1/admin/users/${id}`)).data,
+  getAvatar: async (schoolId: string) => (await request<{ avatarUrl: string | null }>(`/api/v1/profile/avatar/user/${encodeURIComponent(schoolId)}`)).data,
   myProfile: async () => (await request<OwnProfile>('/api/v1/profile/me')).data,
   saveMyProfile: async (body: ProfileEdit) => (await request('/api/v1/profile/me', { method: 'PATCH', body: JSON.stringify(body) })).data,
   changeStatus: async (id: number, status: AccountStatus, reason: string) => (await request(`/api/v1/admin/users/${id}/status`, { method: 'POST', body: JSON.stringify({ status, reason }) })).data,

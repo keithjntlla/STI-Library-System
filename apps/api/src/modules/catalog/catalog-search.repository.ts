@@ -117,10 +117,11 @@ export function buildCatalogSearchQuery(filters: CatalogSearchFilters) {
     const like = `%${filters.query}%`
     where.push(`(
       t.title LIKE ? OR t.isbn LIKE ? OR t.call_number LIKE ? OR
+      c.category_name LIKE ? OR
       rr.research_code LIKE ? OR rr.abstract_text LIKE ? OR
       EXISTS (SELECT 1 FROM authors aq WHERE aq.title_id = t.title_id AND aq.author_name LIKE ?)
     )`)
-    parameters.push(like, like, like, like, like, like)
+    parameters.push(like, like, like, like, like, like, like)
   }
 
   const whereSql = `WHERE ${where.join('\n AND ')}`
@@ -140,7 +141,7 @@ export function buildCatalogSearchQuery(filters: CatalogSearchFilters) {
   const safeLimit = Math.min(Math.max(Math.trunc(filters.limit), 1), 100)
   const safeOffset = Math.max((Math.trunc(filters.page) - 1) * safeLimit, 0)
   const dataSql = `SELECT
-      t.title_id, t.record_type, t.title, t.cover_image_path, t.isbn, t.publication_year,
+      t.title_id, t.record_type, t.title, t.cover_image_path, t.isbn, t.publication_year, t.synopsis,
       t.publisher, t.call_number, t.category_id, t.row_version, c.category_name,
       c.shelf_location AS category_shelf_location,
       rr.research_record_id, rr.research_code, rr.adviser_name,
@@ -162,7 +163,7 @@ export function buildCatalogSearchQuery(filters: CatalogSearchFilters) {
     LEFT JOIN authors a ON a.title_id = t.title_id
     LEFT JOIN physical_copies pc ON pc.title_id = t.title_id
     ${whereSql}
-    GROUP BY t.title_id, t.record_type, t.title, t.cover_image_path, t.isbn, t.publication_year,
+    GROUP BY t.title_id, t.record_type, t.title, t.cover_image_path, t.isbn, t.publication_year, t.synopsis,
       t.publisher, t.call_number, t.category_id, t.row_version, c.category_name, c.shelf_location,
       rr.research_record_id, rr.research_code, rr.adviser_name,
       rr.department_or_program, rr.abstract_text, rr.keywords_text, rr.viewing_status,
@@ -192,6 +193,7 @@ function toCatalogItem(row: RowDataPacket) {
     recordType: row.record_type,
     title: row.title,
     coverImagePath: row.cover_image_path ? String(row.cover_image_path) : null,
+    synopsis: row.synopsis ? String(row.synopsis) : null,
     authors: row.authors ? String(row.authors).split(', ') : [],
     isbn: row.isbn,
     publicationYear: row.publication_year,

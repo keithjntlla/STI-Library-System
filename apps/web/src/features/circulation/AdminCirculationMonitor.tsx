@@ -16,8 +16,13 @@ export function AdminCirculationMonitor() {
   const [data, setData] = useState<CirculationMonitorData | null>(null)
   const [loading, setLoading] = useState(true); const [busyId, setBusyId] = useState<number | null>(null)
   const [error, setError] = useState(''); const [success, setSuccess] = useState('')
-  const [barcode, setBarcode] = useState(''); const [schoolId, setSchoolId] = useState(''); const [submitting, setSubmitting] = useState(false)
+  const [barcode, setBarcode] = useState(''); const [schoolId, setSchoolId] = useState('');
+  const [studentInfo, setStudentInfo] = useState<{name: string, role: string, program: string, avatarUrl: string | null} | null>(null);
+  const [bookInfo, setBookInfo] = useState<{title: string, authors: string, coverUrl: string | null} | null>(null);
+ const [submitting, setSubmitting] = useState(false)
   const [cancelTarget, setCancelTarget] = useState<CirculationMonitorData['items'][number] | null>(null)
+  const [returnTarget, setReturnTarget] = useState<CirculationMonitorData['items'][number] | null>(null)
+  const [showConfirmCheckout, setShowConfirmCheckout] = useState(false);
   const [cancelError, setCancelError] = useState('')
   const [lostTarget, setLostTarget] = useState<CirculationMonitorData['items'][number] | null>(null)
   const [lostError, setLostError] = useState('')
@@ -35,12 +40,45 @@ export function AdminCirculationMonitor() {
     return () => { window.clearInterval(timer); window.removeEventListener('smartlib:circulation-updated', refresh) }
   }, [load])
 
-  async function checkout(event: FormEvent) {
-    event.preventDefault(); if (submitting) return; setSubmitting(true); setError(''); setSuccess('')
-    try { await circulationApi.fulfillClaim(barcode, schoolId); setBarcode(''); setSuccess('School ID and barcode verified. The claim is now an active loan.'); await load() }
+  function promptCheckout(event: React.FormEvent) {
+    event.preventDefault();
+    if (!schoolId || !barcode) return;
+    setShowConfirmCheckout(true);
+  }
+
+  async function checkout() {
+    if (submitting) return; setSubmitting(true); setError(''); setSuccess('')
+    try { await circulationApi.confirmCheckout(barcode, schoolId); setBarcode(''); setSuccess('Checkout confirmed successfully. The book is now an active loan.'); setShowConfirmCheckout(false); await load() }
     catch (reason) { setError(reason instanceof Error ? reason.message : 'Checkout could not be confirmed.') }
     finally { setSubmitting(false) }
   }
+    async function handleReturnScan(data: string) {
+    if (!returnTarget) return;
+    setError(''); setSuccess('');
+    let scannedBarcode = '';
+    if (data.startsWith('{')) {
+      try {
+        const parsed = JSON.parse(data);
+        scannedBarcode = parsed.barcode || parsed.accession_number;
+      } catch (e) {}
+    } else {
+      scannedBarcode = data;
+    }
+    
+    if (scannedBarcode !== returnTarget.barcode && scannedBarcode !== returnTarget.accessionNumber) {
+      setError(`Barcode mismatch! Expected ${returnTarget.barcode}, but scanned ${scannedBarcode}. This is the wrong book.`);
+      setReturnTarget(null);
+      return;
+    }
+
+    const tid = returnTarget.transactionId;
+    setReturnTarget(null);
+    setBusyId(tid);
+    try { await circulationApi.returnBook(tid); setSuccess('Return completed and the waiting queue was advanced.'); await load(); }
+    catch (reason) { setError(reason instanceof Error ? reason.message : 'Return could not be completed.'); }
+    finally { setBusyId(null); }
+  }
+
   async function completeReturn(transactionId: number) {
     setBusyId(transactionId); setError(''); setSuccess('')
     try { await circulationApi.returnBook(transactionId); setSuccess('Return completed and the waiting queue was advanced.'); await load() }
@@ -95,7 +133,7 @@ export function AdminCirculationMonitor() {
       <td className="px-4 py-4"><p className="font-bold text-[#003399]">{item.userName}</p><p className="text-xs text-[#003399]/60">{item.schoolId} · {item.role}</p></td>
       <td className="px-4 py-4"><p className="font-bold text-[#003399]">{item.title}</p><p className="font-mono text-xs text-[#003399]/60">{item.accessionNumber ?? item.barcode}</p></td>
       <td className="px-4 py-4 text-xs text-[#003399]">{formatDate(item.borrowDate ?? item.requestedAt)}</td><td className="px-4 py-4 text-xs font-semibold text-[#003399]">{formatDate(item.dueDate)}</td><td className="px-4 py-4"><StatusBadge status={item.status === 'Pending' ? 'Pending claim' : item.status} /></td>
-      <td className="px-4 py-4"><div className="flex justify-end gap-2">{item.status === 'Pending' ? <><button type="button" onClick={() => { setSchoolId(item.schoolId); setBarcode(item.barcode); setError(''); setSuccess('Borrower School ID and book barcode loaded. Confirm checkout after verifying the presented ID and book.') }} className="rounded-lg border border-[#003399]/20 bg-[#FFFFFF] px-3 py-2 text-xs font-bold text-[#003399]">Verify borrower</button><button disabled={busyId === item.transactionId} onClick={() => { setCancelError(''); setCancelTarget(item) }} className="rounded-lg border border-[#003399]/20 bg-[#FFFFFF] px-3 py-2 text-xs font-bold text-[#003399] disabled:opacity-40">Cancel</button></> : <>{item.status === 'Overdue' ? <button disabled={busyId === item.transactionId} onClick={() => void penalty(item.transactionId)} className="rounded-lg bg-[#FFF200] px-3 py-2 text-xs font-bold text-[#003399] disabled:opacity-40">Calculate penalty</button> : null}<button disabled={busyId === item.transactionId} onClick={() => { setLostError(''); setLostTarget(item) }} className="rounded-lg border border-[#003399]/20 px-3 py-2 text-xs font-bold text-[#003399] disabled:opacity-40">Report lost</button><button disabled={busyId === item.transactionId} onClick={() => void completeReturn(item.transactionId)} className="rounded-lg bg-[#003399] px-3 py-2 text-xs font-bold text-[#FFFFFF] disabled:opacity-40">Process return</button></>}</div></td>
+      <td className="px-4 py-4"><div className="flex justify-end gap-2">{item.status === 'Pending' ? <><button type="button" onClick={() => { setSchoolId(item.schoolId); setBarcode(item.barcode); setError(''); setSuccess('Borrower School ID and book barcode loaded. Confirm checkout after verifying the presented ID and book.') }} className="rounded-lg border border-[#003399]/20 bg-[#FFFFFF] px-3 py-2 text-xs font-bold text-[#003399]">Verify borrower</button><button disabled={busyId === item.transactionId} onClick={() => { setCancelError(''); setCancelTarget(item) }} className="rounded-lg border border-[#003399]/20 bg-[#FFFFFF] px-3 py-2 text-xs font-bold text-[#003399] disabled:opacity-40">Cancel</button></> : <>{item.status === 'Overdue' ? <button disabled={busyId === item.transactionId} onClick={() => void penalty(item.transactionId)} className="rounded-lg bg-[#FFF200] px-3 py-2 text-xs font-bold text-[#003399] disabled:opacity-40">Calculate penalty</button> : null}<button disabled={busyId === item.transactionId} onClick={() => { setLostError(''); setLostTarget(item) }} className="rounded-lg border border-[#003399]/20 px-3 py-2 text-xs font-bold text-[#003399] disabled:opacity-40">Report lost</button><button disabled={busyId === item.transactionId} onClick={() => { setReturnTarget(item); }} className="rounded-lg bg-[#003399] px-3 py-2 text-xs font-bold text-[#FFFFFF] disabled:opacity-40">Process return</button></>}</div></td>
     </tr>) : <tr><td colSpan={6} className="px-4 py-10 text-center font-semibold text-[#003399]">{empty}</td></tr>}</tbody>
   </table></div>
 
@@ -103,7 +141,7 @@ export function AdminCirculationMonitor() {
     <PageHeader eyebrow="Circulation desk" title="Borrow and return monitoring" action={<Button variant="secondary" onClick={() => void load()}><RefreshCw size={16} /> Refresh</Button>} />
     {error ? <div role="alert" className="mb-4 flex items-center gap-3 rounded-xl bg-[#FFF200] px-4 py-3 font-semibold text-[#003399]"><AlertTriangle size={18} />{error}</div> : null}
     {success ? <div role="status" className="mb-4 flex items-center gap-3 rounded-xl border border-[#003399]/20 bg-[#FFFFFF] px-4 py-3 font-semibold text-[#003399]"><CheckCircle2 size={18} />{success}</div> : null}
-    <form onSubmit={checkout} className="mb-5 grid gap-3 rounded-2xl border border-[#003399]/15 bg-[#FFFFFF] p-4 md:grid-cols-[1fr_1fr_auto]">
+    <form onSubmit={promptCheckout} className="mb-5 grid gap-3 rounded-2xl border border-[#003399]/15 bg-[#FFFFFF] p-4 md:grid-cols-[1fr_1fr_auto]">
       <label className="text-xs font-bold text-[#003399]">Book barcode<input required autoFocus value={barcode} onChange={(event) => setBarcode(event.target.value)} placeholder="Scan barcode then press Enter" className="mt-2 h-11 w-full rounded-xl border border-[#003399]/20 px-3 text-sm font-medium text-[#003399] outline-none focus:ring-4 focus:ring-[#003399]/10" /></label>
       <label className="text-xs font-bold text-[#003399]">Verified borrower school ID<input required value={schoolId} onChange={(event) => setSchoolId(event.target.value)} placeholder="Select a pending claimant or enter the presented school ID" className="mt-2 h-11 w-full rounded-xl border border-[#003399]/20 px-3 text-sm font-medium text-[#003399] outline-none focus:ring-4 focus:ring-[#003399]/10" /></label>
       <Button type="submit" className="self-end" onClick={undefined}>{submitting ? 'Confirming…' : <><ScanBarcode size={16} /> Confirm checkout</>}</Button>

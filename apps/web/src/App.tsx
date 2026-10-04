@@ -21,6 +21,7 @@ import { RegistrationPage } from './features/auth/RegistrationPage'
 import { AdminLoginPage } from './features/auth/AdminLoginPage'
 import { InventoryDashboard } from './features/inventory/InventoryDashboard'
 import { BookCatalog } from './features/catalog/BookCatalog'
+import { PublicCatalog } from './features/catalog/PublicCatalog'
 import { ResearchCatalog } from './features/catalog/ResearchCatalog'
 import { BorrowingHistory } from './features/circulation/BorrowingHistory'
 import { AdminCirculationMonitor } from './features/circulation/AdminCirculationMonitor'
@@ -48,7 +49,7 @@ function NotFound() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<AuthenticatedHome />} />
+      <Route path="/" element={<PublicCatalog />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegistrationPage />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />

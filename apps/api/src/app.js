@@ -93,6 +93,17 @@ export function createApp() {
   })
   app.use('/api/auth', authRouter)
   app.use('/api/v1/auth', jwtAuthRouter)
+
+  app.get('/api/v1/public/catalog/books', async (req, res, next) => {
+    try {
+      const { searchCatalog, parseCatalogSearchFilters } = await import('./modules/catalog/catalog-search.repository.ts');
+      const { db } = await import('./config/db.js');
+      const filters = parseCatalogSearchFilters(req.query);
+      const data = await searchCatalog(db, filters);
+      res.json({ success: true, data, filters });
+    } catch (e) { next(e) }
+  });
+
   app.use('/api/v1', authenticateJwt, ensureActiveJwtAccount)
   app.use('/api/v1/profile/avatar', profileAvatarRouter)
   app.use('/api/v1/profile', selfProfileRouter)
@@ -107,6 +118,7 @@ export function createApp() {
   app.get('/api/v1/admin/jobs/status', authenticateJwt, requireJwtRoles('Librarian'), async (_request, response, next) => {
     try { response.json({ success: true, data: await jobRunnerStatus() }) } catch (error) { next(error) }
   })
+  
   app.use('/api/v1/catalog', authenticateJwt, requireJwtRoles('Student', 'Faculty', 'Librarian'), bookCatalogRouter)
   app.use('/api/v1/floor-plan', authenticateJwt, requireJwtRoles('Librarian', 'Student', 'Faculty'), floorPlanRouter)
   app.use('/api/v1/catalog', authenticateJwt, requireJwtRoles('Student', 'Faculty', 'Librarian'), researchCatalogRouter)

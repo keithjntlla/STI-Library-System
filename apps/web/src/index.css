@@ -1,26 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Segoe UI Variable", "Segoe UI", Arial, sans-serif;
-  --font-display: "Aptos Display", "Segoe UI Variable Display", "Segoe UI", Arial, sans-serif;
+  --font-sans: "Poppins", "Segoe UI Variable", "Segoe UI", Arial, sans-serif;
+  --font-display: "Poppins", "Aptos Display", "Segoe UI Variable Display", "Segoe UI", Arial, sans-serif;
 }
 
 :root {
   font-family: var(--font-sans);
-  color: #003399;
+  color: #0b5ea2;
   background: #FFFFFF;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   --sl-bg: #FFFFFF;
   --sl-bg-elevated: #FFFFFF;
   --sl-bg-muted: rgba(0, 51, 153, 0.05);
-  --sl-text: #003399;
+  --sl-text: #0b5ea2;
   --sl-text-muted: rgba(0, 51, 153, 0.65);
   --sl-border: rgba(0, 51, 153, 0.15);
   --sl-accent: #FFF200;
-  --sl-brand: #003399;
+  --sl-brand: #0b5ea2;
 }
 
 * {
@@ -60,7 +61,7 @@ a {
 }
 
 ::selection {
-  color: #003399;
+  color: #0b5ea2;
   background: #FFF200;
 }
 
@@ -76,7 +77,7 @@ a {
 ::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 999px;
-  background: #003399;
+  background: #0b5ea2;
   background-clip: padding-box;
 }
 
@@ -115,7 +116,7 @@ html.dark {
   --sl-text-subtle: rgba(247, 249, 255, 0.72);
   --sl-border: rgba(255, 255, 255, 0.18);
   --sl-accent: #FFF200;
-  --sl-brand: #003399;
+  --sl-brand: #0b5ea2;
   color: var(--sl-text);
   background: var(--sl-bg);
 }
@@ -147,16 +148,16 @@ html.dark .bg-white\/90 {
   background-color: rgba(0, 26, 77, 0.94) !important;
 }
 
-html.dark .bg-\[\#003399\]\/5,
-html.dark .bg-\[\#003399\]\/\[0\.05\] {
+html.dark .bg-\[\#0b5ea2\]\/5,
+html.dark .bg-\[\#0b5ea2\]\/\[0\.05\] {
   background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-html.dark .bg-\[\#003399\]\/10 {
+html.dark .bg-\[\#0b5ea2\]\/10 {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-html.dark .hover\:bg-\[\#003399\]\/5:hover {
+html.dark .hover\:bg-\[\#0b5ea2\]\/5:hover {
   background-color: rgba(255, 255, 255, 0.12) !important;
 }
 
@@ -166,46 +167,46 @@ html.dark .focus\:bg-white:focus {
 
 /*
  * Brand blue ink → light ink on dark surfaces.
- * Attribute selectors cover text-[#003399], text-[#003399]/70, placeholder:, etc.
+ * Attribute selectors cover text-[#0b5ea2], text-[#0b5ea2]/70, placeholder:, etc.
  */
-html.dark [class*="text-[#003399]"] {
+html.dark [class*="text-[#0b5ea2]"] {
   color: var(--sl-text) !important;
 }
 
-html.dark [class*="text-[#003399]/9"],
-html.dark [class*="text-[#003399]/8"],
-html.dark [class*="text-[#003399]/7"] {
+html.dark [class*="text-[#0b5ea2]/9"],
+html.dark [class*="text-[#0b5ea2]/8"],
+html.dark [class*="text-[#0b5ea2]/7"] {
   color: var(--sl-text) !important;
 }
 
-html.dark [class*="text-[#003399]/6"],
-html.dark [class*="text-[#003399]/5"],
-html.dark [class*="text-[#003399]/4"],
-html.dark [class*="text-[#003399]/3"] {
+html.dark [class*="text-[#0b5ea2]/6"],
+html.dark [class*="text-[#0b5ea2]/5"],
+html.dark [class*="text-[#0b5ea2]/4"],
+html.dark [class*="text-[#0b5ea2]/3"] {
   color: var(--sl-text-muted) !important;
 }
 
-html.dark [class*="text-[#003399]/2"],
-html.dark [class*="text-[#003399]/1"] {
+html.dark [class*="text-[#0b5ea2]/2"],
+html.dark [class*="text-[#0b5ea2]/1"] {
   color: var(--sl-text-subtle) !important;
 }
 
-html.dark .hover\:text-\[\#003399\]:hover {
+html.dark .hover\:text-\[\#0b5ea2\]:hover {
   color: #ffffff !important;
 }
 
 /* Borders */
-html.dark [class*="border-[#003399]"] {
+html.dark [class*="border-[#0b5ea2]"] {
   border-color: var(--sl-border) !important;
 }
 
-html.dark .ring-\[\#003399\]\/10,
-html.dark .focus\:ring-\[\#003399\]\/10:focus {
+html.dark .ring-\[\#0b5ea2\]\/10,
+html.dark .focus\:ring-\[\#0b5ea2\]\/10:focus {
   --tw-ring-color: rgba(255, 242, 0, 0.28) !important;
 }
 
-html.dark .focus\:border-\[\#003399\]:focus,
-html.dark .focus\:border-\[\#003399\]\/15:focus {
+html.dark .focus\:border-\[\#0b5ea2\]:focus,
+html.dark .focus\:border-\[\#0b5ea2\]\/15:focus {
   border-color: rgba(255, 242, 0, 0.5) !important;
 }
 
@@ -213,7 +214,7 @@ html.dark [class*="shadow"] {
   --tw-shadow-color: rgba(0, 0, 0, 0.35);
 }
 
-/* Form controls + placeholders (placeholder:text-[#003399]/40 stays dark otherwise) */
+/* Form controls + placeholders (placeholder:text-[#0b5ea2]/40 stays dark otherwise) */
 html.dark input,
 html.dark select,
 html.dark textarea {
@@ -240,14 +241,14 @@ html.dark option {
 }
 
 /* Tables */
-html.dark thead.bg-\[\#003399\],
-html.dark thead[class*="bg-[#003399]"] {
-  background-color: #003399 !important;
+html.dark thead.bg-\[\#0b5ea2\],
+html.dark thead[class*="bg-[#0b5ea2]"] {
+  background-color: #0b5ea2 !important;
   color: #ffffff !important;
 }
 
-html.dark thead.bg-\[\#003399\] *,
-html.dark thead[class*="bg-[#003399]"] * {
+html.dark thead.bg-\[\#0b5ea2\] *,
+html.dark thead[class*="bg-[#0b5ea2]"] * {
   color: #ffffff !important;
 }
 
@@ -255,8 +256,8 @@ html.dark tbody tr {
   border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
-html.dark .divide-\[\#003399\]\/10 > :not([hidden]) ~ :not([hidden]),
-html.dark [class*="divide-[#003399]"] > :not([hidden]) ~ :not([hidden]) {
+html.dark .divide-\[\#0b5ea2\]\/10 > :not([hidden]) ~ :not([hidden]),
+html.dark [class*="divide-[#0b5ea2]"] > :not([hidden]) ~ :not([hidden]) {
   border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
@@ -270,91 +271,91 @@ html.dark .bg-\[\#FFF200\]\/70,
 html.dark .bg-\[\#FFF200\]\/80,
 html.dark .bg-\[\#FFF200\]\/90,
 html.dark .hover\:bg-\[\#FFF200\]:hover {
-  color: #003399 !important;
+  color: #0b5ea2 !important;
 }
 
-html.dark .bg-\[\#FFF200\] [class*="text-[#003399]"],
-html.dark .bg-\[\#FFF200\]\/35 [class*="text-[#003399]"],
-html.dark .bg-\[\#FFF200\]\/40 [class*="text-[#003399]"],
-html.dark .bg-\[\#FFF200\] [class*="text-[#003399]/"],
-html.dark .bg-\[\#FFF200\]\/35 [class*="text-[#003399]/"],
-html.dark .bg-\[\#FFF200\]\/40 [class*="text-[#003399]/"] {
-  color: #003399 !important;
+html.dark .bg-\[\#FFF200\] [class*="text-[#0b5ea2]"],
+html.dark .bg-\[\#FFF200\]\/35 [class*="text-[#0b5ea2]"],
+html.dark .bg-\[\#FFF200\]\/40 [class*="text-[#0b5ea2]"],
+html.dark .bg-\[\#FFF200\] [class*="text-[#0b5ea2]/"],
+html.dark .bg-\[\#FFF200\]\/35 [class*="text-[#0b5ea2]/"],
+html.dark .bg-\[\#FFF200\]\/40 [class*="text-[#0b5ea2]/"] {
+  color: #0b5ea2 !important;
 }
 
 /* Nested brand chips inside yellow headers stay white-on-navy */
-html.dark .bg-\[\#FFF200\] .bg-\[\#003399\],
-html.dark .bg-\[\#FFF200\]\/35 .bg-\[\#003399\],
-html.dark .bg-\[\#FFF200\]\/40 .bg-\[\#003399\] {
-  background-color: #003399 !important;
+html.dark .bg-\[\#FFF200\] .bg-\[\#0b5ea2\],
+html.dark .bg-\[\#FFF200\]\/35 .bg-\[\#0b5ea2\],
+html.dark .bg-\[\#FFF200\]\/40 .bg-\[\#0b5ea2\] {
+  background-color: #0b5ea2 !important;
   color: #ffffff !important;
 }
 
-html.dark .bg-\[\#FFF200\] .bg-\[\#003399\] [class*="text-[#FFFFFF]"],
-html.dark .bg-\[\#FFF200\] .bg-\[\#003399\] .text-white,
-html.dark .bg-\[\#FFF200\] .bg-\[\#003399\] [class*="text-[#FFF"] {
+html.dark .bg-\[\#FFF200\] .bg-\[\#0b5ea2\] [class*="text-[#FFFFFF]"],
+html.dark .bg-\[\#FFF200\] .bg-\[\#0b5ea2\] .text-white,
+html.dark .bg-\[\#FFF200\] .bg-\[\#0b5ea2\] [class*="text-[#FFF"] {
   color: #ffffff !important;
 }
 
 /* Solid brand navy panels / primary CTAs: white text */
-html.dark .bg-\[\#003399\],
-html.dark .bg-\[\#003399\]\/90,
-html.dark [class~="bg-[#003399]"] {
-  background-color: #003399 !important;
+html.dark .bg-\[\#0b5ea2\],
+html.dark .bg-\[\#0b5ea2\]\/90,
+html.dark [class~="bg-[#0b5ea2]"] {
+  background-color: #0b5ea2 !important;
   color: #ffffff !important;
 }
 
-html.dark .bg-\[\#003399\] [class*="text-[#FFFFFF]"],
-html.dark .bg-\[\#003399\] .text-white,
-html.dark .bg-\[\#003399\]\/90 [class*="text-[#FFFFFF]"],
-html.dark .bg-\[\#003399\]\/90 .text-white {
+html.dark .bg-\[\#0b5ea2\] [class*="text-[#FFFFFF]"],
+html.dark .bg-\[\#0b5ea2\] .text-white,
+html.dark .bg-\[\#0b5ea2\]\/90 [class*="text-[#FFFFFF]"],
+html.dark .bg-\[\#0b5ea2\]\/90 .text-white {
   color: #ffffff !important;
 }
 
-html.dark .bg-\[\#003399\] [class*="text-[#FFF200]"],
-html.dark .bg-\[\#003399\]\/90 [class*="text-[#FFF200]"] {
+html.dark .bg-\[\#0b5ea2\] [class*="text-[#FFF200]"],
+html.dark .bg-\[\#0b5ea2\]\/90 [class*="text-[#FFF200]"] {
   color: #FFF200 !important;
 }
 
-html.dark .bg-\[\#003399\] [class*="text-[#FFFFFF]/"],
-html.dark .bg-\[\#003399\] [class*="text-white/"],
-html.dark .bg-\[\#003399\]\/90 [class*="text-[#FFFFFF]/"],
-html.dark .bg-\[\#003399\]\/90 [class*="text-white/"] {
+html.dark .bg-\[\#0b5ea2\] [class*="text-[#FFFFFF]/"],
+html.dark .bg-\[\#0b5ea2\] [class*="text-white/"],
+html.dark .bg-\[\#0b5ea2\]\/90 [class*="text-[#FFFFFF]/"],
+html.dark .bg-\[\#0b5ea2\]\/90 [class*="text-white/"] {
   color: rgba(255, 255, 255, 0.82) !important;
 }
 
 /* Soft navy washes must NOT inherit solid-brand white text rules */
-html.dark .bg-\[\#003399\]\/5,
-html.dark .bg-\[\#003399\]\/10,
-html.dark .bg-\[\#003399\]\/15,
-html.dark .bg-\[\#003399\]\/20,
-html.dark .bg-\[\#003399\]\/25,
-html.dark .bg-\[\#003399\]\/35,
-html.dark .bg-\[\#003399\]\/40,
-html.dark .bg-\[\#003399\]\/55 {
+html.dark .bg-\[\#0b5ea2\]\/5,
+html.dark .bg-\[\#0b5ea2\]\/10,
+html.dark .bg-\[\#0b5ea2\]\/15,
+html.dark .bg-\[\#0b5ea2\]\/20,
+html.dark .bg-\[\#0b5ea2\]\/25,
+html.dark .bg-\[\#0b5ea2\]\/35,
+html.dark .bg-\[\#0b5ea2\]\/40,
+html.dark .bg-\[\#0b5ea2\]\/55 {
   color: var(--sl-text) !important;
 }
 
 /* Same-element yellow + brand-ink (badges, CTAs) */
-html.dark .bg-\[\#FFF200\][class*="text-[#003399]"],
-html.dark .bg-\[\#FFF200\]\/35[class*="text-[#003399]"],
-html.dark .bg-\[\#FFF200\]\/40[class*="text-[#003399]"],
-html.dark .bg-\[\#FFF200\][class*="dark:text-[#003399]"],
-html.dark .bg-\[\#FFF200\]\/35[class*="dark:text-[#003399]"],
-html.dark .bg-\[\#FFF200\]\/40[class*="dark:text-[#003399]"] {
-  color: #003399 !important;
+html.dark .bg-\[\#FFF200\][class*="text-[#0b5ea2]"],
+html.dark .bg-\[\#FFF200\]\/35[class*="text-[#0b5ea2]"],
+html.dark .bg-\[\#FFF200\]\/40[class*="text-[#0b5ea2]"],
+html.dark .bg-\[\#FFF200\][class*="dark:text-[#0b5ea2]"],
+html.dark .bg-\[\#FFF200\]\/35[class*="dark:text-[#0b5ea2]"],
+html.dark .bg-\[\#FFF200\]\/40[class*="dark:text-[#0b5ea2]"] {
+  color: #0b5ea2 !important;
 }
 
 /* Sidebar active item: yellow pill + navy label */
 html.dark aside a.bg-white,
 html.dark aside a.dark\:bg-\[\#FFF200\],
-html.dark aside .bg-white.text-\[\#003399\],
+html.dark aside .bg-white.text-\[\#0b5ea2\],
 html.dark aside a[class*="bg-[#FFF200]"] {
   background-color: #FFF200 !important;
-  color: #003399 !important;
+  color: #0b5ea2 !important;
 }
 
-html.dark aside a.bg-white [class*="text-[#003399]"],
+html.dark aside a.bg-white [class*="text-[#0b5ea2]"],
 html.dark aside a[class*="bg-[#FFF200]"] * {
-  color: #003399 !important;
+  color: #0b5ea2 !important;
 }
