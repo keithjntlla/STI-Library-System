@@ -11,7 +11,7 @@ const initialForm: StudentRegistrationInput = {
   year_grade_level: '', password: '', confirm_password: '',
 }
 
-const fieldClass = 'h-12 w-full rounded-xl border border-[#003399]/20 bg-[#FFFFFF] px-4 text-sm text-[#003399] outline-none transition placeholder:text-[#003399]/40 focus:border-[#003399] focus:ring-4 focus:ring-[#003399]/10'
+const fieldClass = 'h-12 w-full rounded-xl border border-[#0b5ea2]/20 bg-[#FFFFFF] px-4 text-sm text-[#0b5ea2] outline-none transition placeholder:text-[#0b5ea2]/40 focus:border-[#0b5ea2] focus:ring-4 focus:ring-[#0b5ea2]/10'
 
 export function RegistrationPage() {
   const navigate = useNavigate()
@@ -96,37 +96,37 @@ export function RegistrationPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#003399] px-4 py-8 sm:px-6 lg:py-12">
-      <div className="mx-auto w-full max-w-5xl overflow-hidden rounded-[2rem] bg-[#FFFFFF] shadow-2xl shadow-[#003399] lg:grid lg:grid-cols-[.78fr_1.22fr]">
-        <section className="relative overflow-hidden bg-[#003399] p-8 text-[#FFFFFF] lg:p-10">
+    <main className="min-h-screen bg-[#0b5ea2] px-4 py-8 sm:px-6 lg:py-12">
+      <div className="mx-auto w-full max-w-5xl overflow-hidden rounded-[2rem] bg-[#FFFFFF] shadow-2xl shadow-[#0b5ea2] lg:grid lg:grid-cols-[.78fr_1.22fr]">
+        <section className="relative overflow-hidden bg-[#0b5ea2] p-8 text-[#FFFFFF] lg:p-10">
           <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full border-[55px] border-[#FFF200]/10" />
-          <div className="relative flex items-center gap-3"><span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF200] text-[#003399]"><LibraryBig /></span><div><p className="font-display text-lg font-black">STI ORMOC</p><p className="text-xs font-bold uppercase tracking-[.18em] text-[#FFFFFF]/70">Smart Library</p></div></div>
+          <div className="relative flex items-center gap-3"><span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF200] text-[#0b5ea2]"><LibraryBig /></span><div><p className="font-display text-lg font-black">STI ORMOC</p><p className="text-xs font-bold uppercase tracking-[.18em] text-[#FFFFFF]/70">Smart Library</p></div></div>
           <div className="relative mt-14"><p className="text-xs font-black uppercase tracking-[.2em] text-[#FFF200]">Campus access</p><h1 className="mt-4 font-display text-4xl font-black leading-tight">Create your library account.</h1></div>
           <div className="relative mt-10 rounded-2xl border border-[#FFF200]/35 bg-[#FFF200]/10 p-5 text-sm leading-6 text-[#FFFFFF]/80"><strong className="block text-[#FFF200]">Already registered?</strong><Link to="/login" className="mt-1 inline-flex font-bold text-[#FFFFFF] underline underline-offset-4">Return to Login</Link></div>
         </section>
 
         <section className="p-6 sm:p-10">
-          <p className="text-xs font-black uppercase tracking-[.18em] text-[#003399]/55">New account</p><h2 className="mt-2 font-display text-3xl font-black text-[#003399]">Account Registration</h2>
-          {message ? <div role="alert" className="mt-5 rounded-xl border border-[#003399] bg-[#FFF200] px-4 py-3 text-sm font-bold text-[#003399]">{message}{registrationUnavailable ? <Link to="/login" className="mt-2 block underline underline-offset-4">Go to Sign In</Link> : null}</div> : null}
-          {approvalPending ? <div className="mt-6 rounded-xl border border-[#003399]/20 p-5 text-sm text-[#003399]">Your registration is awaiting Admin approval. You can sign in after your account is approved.<Link to="/login" className="mt-3 block font-bold underline">Return to Login</Link></div> : verification ? <form className="mt-6 space-y-4" onSubmit={submitCode}>
+          <p className="text-xs font-black uppercase tracking-[.18em] text-[#0b5ea2]/55">New account</p><h2 className="mt-2 font-display text-3xl font-black text-[#0b5ea2]">Account Registration</h2>
+          {message ? <div role="alert" className="mt-5 rounded-xl border border-[#0b5ea2] bg-[#FFF200] px-4 py-3 text-sm font-bold text-[#0b5ea2]">{message}{registrationUnavailable ? <Link to="/login" className="mt-2 block underline underline-offset-4">Go to Sign In</Link> : null}</div> : null}
+          {approvalPending ? <div className="mt-6 rounded-xl border border-[#0b5ea2]/20 p-5 text-sm text-[#0b5ea2]">Your registration is awaiting Admin approval. You can sign in after your account is approved.<Link to="/login" className="mt-3 block font-bold underline">Return to Login</Link></div> : verification ? <form className="mt-6 space-y-4" onSubmit={submitCode}>
             <Field label="Verification code"><input inputMode="numeric" maxLength={6} autoComplete="one-time-code" value={code} onChange={event => setCode(event.target.value.replace(/\D/g, ''))} placeholder="Six-digit code" className={fieldClass} /></Field>
-            <button disabled={busy || code.length !== 6} className="h-12 w-full rounded-xl bg-[#FFF200] font-bold text-[#003399] disabled:opacity-50">Verify school email</button>
-            <button type="button" disabled={busy} onClick={() => void resendCode()} className="text-sm font-bold text-[#003399] underline">Resend code</button>
+            <button disabled={busy || code.length !== 6} className="h-12 w-full rounded-xl bg-[#FFF200] font-bold text-[#0b5ea2] disabled:opacity-50">Verify school email</button>
+            <button type="button" disabled={busy} onClick={() => void resendCode()} className="text-sm font-bold text-[#0b5ea2] underline">Resend code</button>
           </form> :
           <form className="mt-6 grid gap-4 sm:grid-cols-2" onSubmit={submit} noValidate>
             <Field label="Register as" error={errors.role}><select value={form.role} onChange={event => update('role', event.target.value)} className={fieldClass}>{roles.map(role => <option key={role}>{role}</option>)}</select></Field>
             <div className="hidden sm:block" />
-            <Field label="First Name" error={errors.first_name}><span className="relative block"><UserRound className="absolute left-4 top-1/2 -translate-y-1/2 text-[#003399]/45" size={17} /><input autoFocus autoComplete="given-name" value={form.first_name} onChange={(event) => update('first_name', event.target.value)} placeholder="First name" className={`${fieldClass} pl-11`} /></span></Field>
+            <Field label="First Name" error={errors.first_name}><span className="relative block"><UserRound className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0b5ea2]/45" size={17} /><input autoFocus autoComplete="given-name" value={form.first_name} onChange={(event) => update('first_name', event.target.value)} placeholder="First name" className={`${fieldClass} pl-11`} /></span></Field>
             <Field label="Last Name" error={errors.last_name}><input autoComplete="family-name" value={form.last_name} onChange={(event) => update('last_name', event.target.value)} placeholder="Last name" className={fieldClass} /></Field>
-            <Field label="School Email" error={errors.school_email}><span className="relative block"><Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#003399]/45" size={17} /><input type="email" autoComplete="email" value={form.school_email} onChange={(event) => update('school_email', event.target.value)} placeholder="name@ormoc.sti.edu.ph" className={`${fieldClass} pl-11`} /></span></Field>
-            <Field label="School ID" error={errors.school_id}><span className="relative block"><IdCard className="absolute left-4 top-1/2 -translate-y-1/2 text-[#003399]/45" size={17} /><input autoComplete="username" value={form.school_id} onChange={(event) => update('school_id', event.target.value)} placeholder="STI-2026-XXXX" className={`${fieldClass} pl-11 uppercase placeholder:normal-case`} /></span></Field>
+            <Field label="School Email" error={errors.school_email}><span className="relative block"><Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0b5ea2]/45" size={17} /><input type="email" autoComplete="email" value={form.school_email} onChange={(event) => update('school_email', event.target.value)} placeholder="name@ormoc.sti.edu.ph" className={`${fieldClass} pl-11`} /></span></Field>
+            <Field label="School ID" error={errors.school_id}><span className="relative block"><IdCard className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0b5ea2]/45" size={17} /><input autoComplete="username" value={form.school_id} onChange={(event) => update('school_id', event.target.value)} placeholder="STI-2026-XXXX" className={`${fieldClass} pl-11 uppercase placeholder:normal-case`} /></span></Field>
             <Field label="Program / Strand" error={errors.program_strand}><select value={form.program_strand} onChange={(event) => update('program_strand', event.target.value)} className={fieldClass}><option value="">{form.role === 'Student' ? 'Select program or pathway' : 'Optional'}</option><optgroup label="College"><option>Bachelor of Science in Information Technology</option><option>Bachelor of Science in Tourism Management</option><option>Bachelor of Science in Hospitality Management</option></optgroup><optgroup label="Senior High — Academic"><option>STEM</option><option>ABM</option><option>HUMSS</option><option>General Academic</option></optgroup><optgroup label="Senior High — TechPro"><option>IT in Mobile App and Web Development</option><option>Computer and Communications Technology</option><option>Tourism Operations</option><option>Culinary Arts</option></optgroup></select></Field>
             <Field label="Year / Grade Level" error={errors.year_grade_level}><select value={form.year_grade_level} onChange={(event) => update('year_grade_level', event.target.value)} className={fieldClass}><option value="">{form.role === 'Student' ? 'Select year or grade level' : 'Optional'}</option><option>Grade 11</option><option>Grade 12</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></Field>
-            <Field label="Password" error={errors.password}><span className="relative block"><LockKeyhole className="absolute left-4 top-1/2 -translate-y-1/2 text-[#003399]/45" size={17} /><input type={showPasswords ? 'text' : 'password'} autoComplete="new-password" value={form.password} onChange={(event) => update('password', event.target.value)} placeholder="At least 8 characters" className={`${fieldClass} pl-11 pr-11`} /><button type="button" onClick={() => setShowPasswords((current) => !current)} aria-label={showPasswords ? 'Hide passwords' : 'Show passwords'} className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-[#003399]/55">{showPasswords ? <EyeOff size={17} /> : <Eye size={17} />}</button></span></Field>
+            <Field label="Password" error={errors.password}><span className="relative block"><LockKeyhole className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0b5ea2]/45" size={17} /><input type={showPasswords ? 'text' : 'password'} autoComplete="new-password" value={form.password} onChange={(event) => update('password', event.target.value)} placeholder="At least 8 characters" className={`${fieldClass} pl-11 pr-11`} /><button type="button" onClick={() => setShowPasswords((current) => !current)} aria-label={showPasswords ? 'Hide passwords' : 'Show passwords'} className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-[#0b5ea2]/55">{showPasswords ? <EyeOff size={17} /> : <Eye size={17} />}</button></span></Field>
             <Field label="Confirm Password" error={errors.confirm_password}><input type={showPasswords ? 'text' : 'password'} autoComplete="new-password" value={form.confirm_password} onChange={(event) => update('confirm_password', event.target.value)} placeholder="Repeat your password" className={fieldClass} /></Field>
-            <button disabled={busy} className="mt-2 flex h-13 items-center justify-center rounded-xl bg-[#FFF200] px-5 text-sm font-black uppercase tracking-[.12em] text-[#003399] shadow-lg shadow-[#003399]/10 transition hover:ring-4 hover:ring-[#003399]/10 disabled:cursor-wait disabled:opacity-60 sm:col-span-2">{busy ? 'Creating account…' : 'Register'}</button>
+            <button disabled={busy} className="mt-2 flex h-13 items-center justify-center rounded-xl bg-[#FFF200] px-5 text-sm font-black uppercase tracking-[.12em] text-[#0b5ea2] shadow-lg shadow-[#0b5ea2]/10 transition hover:ring-4 hover:ring-[#0b5ea2]/10 disabled:cursor-wait disabled:opacity-60 sm:col-span-2">{busy ? 'Creating account…' : 'Register'}</button>
           </form>}
-          <p className="mt-6 text-center text-sm text-[#003399]/65">Already registered? <Link to="/login" className="font-black text-[#003399] underline decoration-[#FFF200] decoration-4 underline-offset-4">Sign In Here</Link></p>
+          <p className="mt-6 text-center text-sm text-[#0b5ea2]/65">Already registered? <Link to="/login" className="font-black text-[#0b5ea2] underline decoration-[#FFF200] decoration-4 underline-offset-4">Sign In Here</Link></p>
         </section>
       </div>
     </main>
@@ -134,5 +134,5 @@ export function RegistrationPage() {
 }
 
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
-  return <label className="block"><span className="mb-2 block text-sm font-bold text-[#003399]">{label}</span>{children}{error ? <span className="mt-1.5 block text-xs font-bold text-[#003399]">{error}</span> : null}</label>
+  return <label className="block"><span className="mb-2 block text-sm font-bold text-[#0b5ea2]">{label}</span>{children}{error ? <span className="mt-1.5 block text-xs font-bold text-[#0b5ea2]">{error}</span> : null}</label>
 }

@@ -13,7 +13,7 @@ export function BookCoverThumbnail({ title, coverImagePath, className = 'h-20 w-
   useEffect(() => { setFailed(false) }, [coverImagePath])
 
   return (
-    <div className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#003399] text-[#FFF200] ${className}`}>
+    <div className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#0b5ea2] text-[#FFF200] ${className}`}>
       {coverImagePath && !failed
         ? <img src={coverImagePath} alt={`${title} cover`} className="h-full w-full object-cover" onError={() => setFailed(true)} />
         : <BookOpen aria-hidden="true" size={22} />}

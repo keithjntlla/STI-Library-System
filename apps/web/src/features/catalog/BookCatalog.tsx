@@ -15,10 +15,10 @@ const EMPTY_PAGINATION: Pagination = { page: 1, limit: 24, total: 0, totalPages:
 
 function AvailabilityBadge({ status }: { status: string }) {
   const style = status === 'Available'
-    ? 'bg-[#003399] text-[#FFFFFF]'
+    ? 'bg-[#0b5ea2] text-[#FFFFFF]'
     : status === 'Reserved'
-      ? 'bg-[#FFF200] text-[#003399]'
-      : 'border border-[#003399]/15 bg-[#FFFFFF] text-[#003399]/55'
+      ? 'bg-[#FFF200] text-[#0b5ea2]'
+      : 'border border-[#0b5ea2]/15 bg-[#FFFFFF] text-[#0b5ea2]/55'
   return <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${style}`}>{status}</span>
 }
 
@@ -101,10 +101,10 @@ export function BookCatalog() {
 
   return (
     <>
-      <PageHeader eyebrow="Digital catalog" title="Book catalog" action={<div className="flex items-center gap-2"><Link to={viewer.role === 'Faculty' ? '/faculty/cart' : '/student/cart'} className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#003399]/15 bg-[#FFFFFF] px-3 text-xs font-bold text-[#003399]"><ShoppingBag size={16} /> Cart {cart.length}</Link><button onClick={() => void loadBooks()} aria-label="Refresh catalog" className="rounded-xl border border-[#003399]/15 bg-[#FFFFFF] p-2.5 text-[#003399]"><RefreshCw size={17} /></button></div>} />
+      <PageHeader eyebrow="Digital catalog" title="Book catalog" action={<div className="flex items-center gap-2"><Link to={viewer.role === 'Faculty' ? '/faculty/cart' : '/student/cart'} className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#0b5ea2]/15 bg-[#FFFFFF] px-3 text-xs font-bold text-[#0b5ea2]"><ShoppingBag size={16} /> Cart {cart.length}</Link><button onClick={() => void loadBooks()} aria-label="Refresh catalog" className="rounded-xl border border-[#0b5ea2]/15 bg-[#FFFFFF] p-2.5 text-[#0b5ea2]"><RefreshCw size={17} /></button></div>} />
 
-      {error ? <div role="alert" className="mb-4 rounded-xl border border-[#003399] bg-[#FFF200] p-3 text-sm font-semibold text-[#003399]">{error}</div> : null}
-      {notice ? <div role="status" className="mb-4 rounded-xl bg-[#003399] p-3 text-sm font-semibold text-[#FFFFFF]">{notice}</div> : null}
+      {error ? <div role="alert" className="mb-4 rounded-xl border border-[#0b5ea2] bg-[#FFF200] p-3 text-sm font-semibold text-[#0b5ea2]">{error}</div> : null}
+      {notice ? <div role="status" className="mb-4 rounded-xl bg-[#0b5ea2] p-3 text-sm font-semibold text-[#FFFFFF]">{notice}</div> : null}
 
       <SectionCard className="mb-5 p-4 sm:p-5">
         <CategoryFilterSearchBar
@@ -115,17 +115,17 @@ export function BookCatalog() {
         />
       </SectionCard>
 
-      <div className="mb-4 flex items-center justify-between"><p className="text-sm font-bold text-[#003399]">{pagination.total} books found</p>{viewer.role === 'Student' ? <p className="text-xs font-semibold text-[#003399]/65">Active + selected: {viewer.activeBookCount + cart.length} / 2</p> : null}</div>
+      <div className="mb-4 flex items-center justify-between"><p className="text-sm font-bold text-[#0b5ea2]">{pagination.total} books found</p>{viewer.role === 'Student' ? <p className="text-xs font-semibold text-[#0b5ea2]/65">Active + selected: {viewer.activeBookCount + cart.length} / 2</p> : null}</div>
 
-      {loading && books.length === 0 ? <SectionCard className="p-16 text-center text-sm font-semibold text-[#003399]">Loading catalog…</SectionCard> : null}
-      {!loading && books.length === 0 ? <SectionCard className="p-16 text-center"><BookOpen className="mx-auto text-[#003399]" size={30} /><p className="mt-3 font-display text-lg font-bold text-[#003399]">No books match these filters</p></SectionCard> : null}
+      {loading && books.length === 0 ? <SectionCard className="p-16 text-center text-sm font-semibold text-[#0b5ea2]">Loading catalog…</SectionCard> : null}
+      {!loading && books.length === 0 ? <SectionCard className="p-16 text-center"><BookOpen className="mx-auto text-[#0b5ea2]" size={30} /><p className="mt-3 font-display text-lg font-bold text-[#0b5ea2]">No books match these filters</p></SectionCard> : null}
 
       <div className="grid gap-4 lg:grid-cols-2">{books.map((book) => {
         const action = catalogActionLabel(book.availableCopiesCount)
-        return <SectionCard key={book.titleId} className="p-4 sm:p-5"><div className="flex flex-col gap-4 sm:flex-row"><div className="flex h-24 w-full shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#003399] text-[#FFF200] sm:w-20">{book.coverImagePath ? <img src={book.coverImagePath} alt={`${book.title} cover`} className="h-full w-full object-cover" /> : <BookOpen size={28} />}</div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-start justify-between gap-2"><div><h2 className="font-display text-lg font-bold leading-tight text-[#003399]">{book.title}</h2><p className="mt-1 text-sm text-[#003399]/70">{book.author}</p></div><AvailabilityBadge status={book.currentAvailabilityStatus} /></div><div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#003399]/65"><span>{book.publicationYear ?? 'Year not recorded'}</span><span className="font-mono">{book.callNumber ?? book.shelfLocation ?? 'Shelf pending'}</span><span className="font-bold text-[#003399]">Copies: {book.availableCopiesCount} of {book.totalCopiesCount} available</span></div></div></div><div className="mt-4 flex gap-2"><button onClick={() => setSelectedTitleId(book.titleId)} className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-[#003399]/15 bg-[#FFFFFF] text-sm font-bold text-[#003399]"><Eye size={16} /> View details</button>{action === 'Borrow' ? <button onClick={() => addToCart(book)} disabled={cartBooks.has(book.titleId)} className="h-10 flex-1 rounded-xl bg-[#003399] text-sm font-bold text-[#FFFFFF] disabled:opacity-50">{cartBooks.has(book.titleId) ? 'In cart' : 'Borrow'}</button> : <button onClick={() => void reserve(book)} disabled={reserving === book.titleId} className="h-10 flex-1 rounded-xl bg-[#FFF200] text-sm font-bold text-[#003399] disabled:opacity-50">{reserving === book.titleId ? 'Reserving…' : 'Reserve'}</button>}</div></SectionCard>
+        return <SectionCard key={book.titleId} className="p-4 sm:p-5"><div className="flex flex-col gap-4 sm:flex-row"><div className="flex h-24 w-full shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#0b5ea2] text-[#FFF200] sm:w-20">{book.coverImagePath ? <img src={book.coverImagePath} alt={`${book.title} cover`} className="h-full w-full object-cover" /> : <BookOpen size={28} />}</div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-start justify-between gap-2"><div><h2 className="font-display text-lg font-bold leading-tight text-[#0b5ea2]">{book.title}</h2><p className="mt-1 text-sm text-[#0b5ea2]/70">{book.author}</p></div><AvailabilityBadge status={book.currentAvailabilityStatus} /></div><div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#0b5ea2]/65"><span>{book.publicationYear ?? 'Year not recorded'}</span><span className="font-mono">{book.callNumber ?? book.shelfLocation ?? 'Shelf pending'}</span><span className="font-bold text-[#0b5ea2]">Copies: {book.availableCopiesCount} of {book.totalCopiesCount} available</span></div></div></div><div className="mt-4 flex gap-2"><button onClick={() => setSelectedTitleId(book.titleId)} className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-[#0b5ea2]/15 bg-[#FFFFFF] text-sm font-bold text-[#0b5ea2]"><Eye size={16} /> View details</button>{action === 'Borrow' ? <button onClick={() => addToCart(book)} disabled={cartBooks.has(book.titleId)} className="h-10 flex-1 rounded-xl bg-[#0b5ea2] text-sm font-bold text-[#FFFFFF] disabled:opacity-50">{cartBooks.has(book.titleId) ? 'In cart' : 'Borrow'}</button> : <button onClick={() => void reserve(book)} disabled={reserving === book.titleId} className="h-10 flex-1 rounded-xl bg-[#FFF200] text-sm font-bold text-[#0b5ea2] disabled:opacity-50">{reserving === book.titleId ? 'Reserving…' : 'Reserve'}</button>}</div></SectionCard>
       })}</div>
 
-      {pagination.totalPages > 1 ? <nav className="mt-5 flex items-center justify-center gap-3" aria-label="Catalog pages"><button disabled={page <= 1} onClick={() => setPage((value) => value - 1)} className="rounded-xl border border-[#003399]/15 p-2 text-[#003399] disabled:opacity-40"><ChevronLeft size={18} /></button><span className="text-xs font-bold text-[#003399]">Page {page} of {pagination.totalPages}</span><button disabled={page >= pagination.totalPages} onClick={() => setPage((value) => value + 1)} className="rounded-xl border border-[#003399]/15 p-2 text-[#003399] disabled:opacity-40"><ChevronRight size={18} /></button></nav> : null}
+      {pagination.totalPages > 1 ? <nav className="mt-5 flex items-center justify-center gap-3" aria-label="Catalog pages"><button disabled={page <= 1} onClick={() => setPage((value) => value - 1)} className="rounded-xl border border-[#0b5ea2]/15 p-2 text-[#0b5ea2] disabled:opacity-40"><ChevronLeft size={18} /></button><span className="text-xs font-bold text-[#0b5ea2]">Page {page} of {pagination.totalPages}</span><button disabled={page >= pagination.totalPages} onClick={() => setPage((value) => value + 1)} className="rounded-xl border border-[#0b5ea2]/15 p-2 text-[#0b5ea2] disabled:opacity-40"><ChevronRight size={18} /></button></nav> : null}
 
       {selectedTitleId !== null ? <BookOverview titleId={selectedTitleId} role={viewer.role} activeBookCount={viewer.activeBookCount} selectedBookCount={cart.length} alreadySelected={cartBooks.has(selectedTitleId)} onAddToCart={addToCart} onClose={() => {setSelectedTitleId(null);if(searchParams.has('titleId'))setSearchParams({})}} /> : null}
     </>

@@ -28,7 +28,7 @@ export function Button({ children, variant = 'primary', className, type = 'butto
 }
 
 export function SectionCard({ children, className }: { children: ReactNode; className?: string }) {
-  return <section className={cn('rounded-2xl border border-[#0b5ea2]/10 bg-white shadow-[0_1px_3px_rgba(0,51,153,0.08)] dark:border-white/10 dark:bg-[#001a4d] dark:shadow-[0_1px_3px_rgba(0,0,0,0.35)]', className)}>{children}</section>
+  return <section className={cn('rounded-2xl border border-[#0b5ea2]/10 bg-white shadow-[0_1px_3px_rgba(11,94,162,0.08)] dark:border-white/10 dark:bg-[#001a4d] dark:shadow-[0_1px_3px_rgba(0,0,0,0.35)]', className)}>{children}</section>
 }
 
 const toneClasses: Record<string, string> = {
